@@ -1,0 +1,26 @@
+*{box-sizing:border-box}body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif;background:#f3f5f8;color:#1f2a37;line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+.mast{background:linear-gradient(135deg,#123a63,#1f5f99);color:#fff;padding:28px 0 22px;margin-bottom:20px}
+.mast h1{font-family:Merriweather,serif;font-size:34px;margin:0}.mast h1 span{color:#9fd0ff}.mast p{margin:6px 0 0;opacity:.9}
+.card{background:#fff;border:1px solid #dfe5ec;border-radius:12px;padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+h2{font-family:Merriweather,serif;font-size:19px;margin:0 0 12px;color:#123a63}
+label{display:block;font-weight:500;margin:10px 0;font-size:14px}
+input,select,textarea{width:100%;margin-top:4px;padding:10px;border:1px solid #c9d3de;border-radius:8px;font:inherit;background:#fbfcfd}
+textarea{resize:vertical}input[type=file]{background:#fff}
+.row{display:flex;gap:8px}.row input{flex:1;margin:0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.grid3{grid-template-columns:1fr}.row{flex-wrap:wrap}.mast h1{font-size:26px}}
+button{font:inherit;border-radius:8px;padding:10px 16px;cursor:pointer;border:1px solid #1f5f99}
+.primary{background:#1f5f99;color:#fff;font-weight:600}.primary:disabled{opacity:.6}
+.ghost{background:#fff;color:#1f5f99}
+.actions{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.hint,small{color:#5b6b7c;font-size:13px}
+.notice{background:#fff8e6;border-left:4px solid #d99a00;padding:12px 14px;border-radius:8px;margin-bottom:18px;font-size:14px}
+.imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.imgs div{border:1px solid #dfe5ec;border-radius:8px;padding:8px;font-size:13px}.imgs img{width:100%;height:120px;object-fit:cover;border-radius:6px}
+.tabs{display:flex;gap:6px;margin-bottom:8px;align-items:center}.tabs button{padding:6px 12px}.tabs .on{background:#1f5f99;color:#fff}#wc{margin-left:auto;font-size:13px;color:#5b6b7c}
+#draft{font-family:'Times New Roman',serif;font-size:16px}
+.paper{font-family:'Times New Roman',serif;font-size:17px;line-height:1.5;border:1px solid #dfe5ec;padding:28px;border-radius:8px;background:#fff}
+.paper h1{text-align:center;font-size:22px}.paper .sapo{font-style:italic;font-weight:bold}.paper figure{text-align:center;margin:12px 0}.paper img{max-width:80%}.paper figcaption{font-style:italic;font-size:15px}
+.paper .chk{background:#ffe9a8}.paper .by{text-align:right;font-weight:bold}
+footer{text-align:center;color:#7a8896;font-size:13px;padding:20px 0 40px}

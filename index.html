@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bút Ký AI – Trợ lý cộng tác viên báo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header class="mast"><div class="wrap"><h1>Bút Ký <span>AI</span></h1><p>Trợ lý soạn bản thảo cho cộng tác viên báo · Giáo dục & Chuyển đổi số · Công tác Đảng – Chính trị tư tưởng</p></div></header>
+<main class="wrap">
+<div class="notice"><b>Lưu ý quan trọng:</b> AI chỉ tạo <b>bản thảo</b>. Cộng tác viên phải đọc duyệt, kiểm chứng số liệu, tên, chức danh trước khi gửi tòa soạn. Không đưa tài liệu mật, dữ liệu cá nhân học sinh vào phần mềm. Bài công tác Đảng phải khớp đúng văn bản, nguồn do mình cung cấp; mọi chỗ AI đánh dấu <code>[CẦN KIỂM CHỨNG]</code> phải xử lý trước khi gửi.</div>
+
+<section class="card"><h2>① Khóa API Gemini (miễn phí)</h2>
+<p class="hint">Lấy khóa miễn phí tại <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> → “Create API key” → dán vào đây. Khóa chỉ lưu trong trình duyệt của máy này (localStorage), gửi thẳng tới Google, không qua máy chủ nào khác.</p>
+<div class="row"><input id="apiKey" type="password" placeholder="Dán khóa API Gemini (AIza...)"><button id="saveKey" class="ghost">Lưu khóa</button><button id="clearKey" class="ghost">Xóa</button></div>
+<small id="keyStatus"></small></section>
+
+<section class="card"><h2>② Thông tin bài viết</h2>
+<label>Tên bài (tít dự kiến)<input id="title" placeholder="VD: Trường THCS ... đẩy mạnh chuyển đổi số trong dạy học"></label>
+<div class="grid3">
+<label>Mảng báo<select id="mode"><option value="gd">Giáo dục & Chuyển đổi số</option><option value="dang">Công tác Đảng – Chính trị tư tưởng</option></select></label>
+<label>Thể loại<select id="genre"><option>Tin ngắn</option><option>Tường thuật</option><option>Phóng sự</option><option>Bình luận</option><option>Bài tuyên truyền tư tưởng</option></select></label>
+<label>Độ dài (trang A4)<select id="pages"><option>1</option><option selected>1.5</option><option>2</option><option>3</option></select></label>
+</div>
+<label>Tác giả (dòng ký tên)<input id="author" value="Nguyễn Minh Tuấn"></label>
+<label>Sapo gợi ý (không bắt buộc)<textarea id="sapo" rows="2"></textarea></label>
+<label>Ghi chú, dữ kiện, trích dẫn, dự thảo… (dán vào đây)<textarea id="notes" rows="7" placeholder="Thời gian, địa điểm, nhân vật, số liệu, câu phát biểu… Càng đủ, bài càng chính xác."></textarea></label>
+<label>Tài liệu đính kèm (.txt, .md, .docx – có thể chọn nhiều)<input id="files" type="file" multiple accept=".txt,.md,.docx"></label>
+<div id="fileList" class="hint"></div>
+<label>Đường link tham khảo (mỗi dòng một link)<textarea id="urls" rows="3" placeholder="https://..."></textarea></label>
+<label>Ảnh minh họa (chọn nhiều ảnh, nhập chú thích)<input id="images" type="file" multiple accept="image/*"></label>
+<div id="imgList" class="imgs"></div>
+<div class="actions"><button id="go" class="primary">✍️ Viết bài</button><span id="status"></span></div>
+</section>
+
+<section class="card" id="outCard" hidden><h2>③ Bản thảo – chỉnh sửa trước khi xuất</h2>
+<p class="hint">Quy ước: dòng đầu <code>TIÊU ĐỀ:</code>, dòng <code>SAPO:</code>, đầu mục bắt đầu bằng <code>## </code>, vị trí ảnh <code>[[ANH:1]]</code>. Sửa thoải mái — bản xuất Word dùng đúng nội dung ở đây.</p>
+<div class="tabs"><button data-t="edit" class="on">Sửa</button><button data-t="prev">Xem trước</button><span id="wc"></span></div>
+<textarea id="draft" rows="24"></textarea>
+<article id="preview" class="paper" hidden></article>
+<div class="actions"><button id="export" class="primary">📄 Xuất Word (.docx)</button><button id="copy" class="ghost">Sao chép</button></div>
+</section>
+<footer>Bút Ký AI · mã nguồn mở, chạy hoàn toàn trên trình duyệt · Bản thảo – cộng tác viên tự chịu trách nhiệm nội dung.</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<script src="app.js"></script>
+</body></html>
