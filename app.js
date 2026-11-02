@@ -1,5 +1,5 @@
 const $=id=>document.getElementById(id);
-const MODELS=['gemini-2.5-flash','gemini-2.0-flash','gemini-2.5-flash-lite','gemini-flash-latest'];
+const MODELS=['gemini-2.0-flash','gemini-2.5-flash-lite','gemini-2.5-flash','gemini-flash-latest'];
 const state={files:[],images:[]};
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
@@ -74,18 +74,47 @@ SAPO GỢI Ý: ${$('sapo').value.trim()||'(không có)'}
 ${src}`;
 }
 
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const isBusy=(status,msg)=>status===429||status===503||/high demand|overloaded|try again later|resource.?exhausted|quota|rate.?limit/i.test(msg||'');
+
 async function callGemini(prompt,temp){
   const key=localStorage.getItem('gemini_key')||$('apiKey').value.trim();
   if(!key) throw new Error('Chưa nhập khóa API Gemini (mục ①).');
+  const models=[...MODELS,'gemini-2.0-flash-lite','gemini-1.5-flash','gemini-1.5-flash-8b','gemini-1.5-flash-latest'];
   let last='';
-  for(const m of MODELS){
-    setStatus(`Đang viết bằng ${m}…`);
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(key)}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{temperature:temp,maxOutputTokens:8192}})});
-    const j=await r.json().catch(()=>({}));
-    if(r.ok){const t=j.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('');if(t)return t.trim();last='Mô hình không trả nội dung (có thể bị bộ lọc an toàn chặn).';}
-    else{last=j.error?.message||('HTTP '+r.status);if(r.status===400&&/API key/i.test(last))break;}
+  for(const m of models){
+    for(let attempt=1; attempt<=3; attempt++){
+      setStatus(attempt===1?`Đang viết bằng ${m}…`:`${m} đang đông — thử lại lần ${attempt}/3…`);
+      let r,j;
+      try{
+        r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(key)}`,{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{temperature:temp,maxOutputTokens:8192}})});
+        j=await r.json().catch(()=>({}));
+      }catch(net){
+        last='Mạng lỗi: '+(net.message||net);
+        await sleep(1500*attempt);
+        continue;
+      }
+      if(r.ok){
+        const t=j.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('');
+        if(t) return t.trim();
+        last='Mô hình không trả nội dung (có thể bị bộ lọc an toàn chặn).';
+        break;
+      }
+      last=j.error?.message||('HTTP '+r.status);
+      if(r.status===400&&/API key|API_KEY|invalid/i.test(last)){
+        throw new Error('Khóa API Gemini không hợp lệ hoặc bị tắt. Thầy tạo lại khóa tại aistudio.google.com/apikey rồi bấm Lưu khóa.');
+      }
+      if(isBusy(r.status,last)){
+        await sleep(2000*attempt);
+        continue;
+      }
+      break; // other errors → next model
+    }
+  }
+  if(isBusy(0,last)){
+    throw new Error('Gemini đang quá tải (high demand). Thầy đợi khoảng 1–2 phút rồi bấm lại «Viết bài» — app sẽ tự đổi model và thử lại.');
   }
   throw new Error('Gemini báo lỗi: '+last);
 }
