@@ -1,5 +1,5 @@
 const $=id=>document.getElementById(id);
-const MODELS=['gemini-2.0-flash','gemini-2.5-flash-lite','gemini-2.5-flash','gemini-flash-latest'];
+const MODELS=['gemini-flash-lite-latest','gemini-2.5-flash-lite','gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-flash-latest','gemini-2.5-flash','gemini-3.8-flash','gemini-3.5-flash'];
 const state={files:[],images:[]};
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
@@ -80,7 +80,7 @@ const isBusy=(status,msg)=>status===429||status===503||/high demand|overloaded|t
 async function callGemini(prompt,temp){
   const key=localStorage.getItem('gemini_key')||$('apiKey').value.trim();
   if(!key) throw new Error('Chưa nhập khóa API Gemini (mục ①).');
-  const models=[...MODELS,'gemini-2.0-flash-lite','gemini-1.5-flash','gemini-1.5-flash-8b','gemini-1.5-flash-latest'];
+  const models=[...MODELS,'gemini-2.5-pro','gemini-pro-latest'];
   let last='';
   for(const m of models){
     for(let attempt=1; attempt<=3; attempt++){
